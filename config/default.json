@@ -1,0 +1,20 @@
+{
+    "appSecret": "",
+    "pageAccessToken": "",
+    "validationToken": "",
+    "sessionMaxLength": 600000,
+    "apiUri": "http://api:9100",
+    "apiUsername": "",
+    "apiPassword": "",
+    "apiUserId": "",
+    "redis": {
+        "host": "localhost",
+        "port" : 6379
+    },
+    "i18n":{
+        "locales": ["en", "th"],
+        "directory":"./locales",
+        "queryParameter": "lang",
+        "defaultLocale": "th"
+    }
+}

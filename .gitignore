@@ -1,0 +1,8 @@
+
+node_modules
+
+config/production*
+config/development*
+ 
+Procfile
+

@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  bot:
+    build: .
+    depends_on:
+      - redis
+    ports:
+      -  "5200:5200"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
