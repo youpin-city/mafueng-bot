@@ -1,0 +1,52 @@
+{
+  "apps" : [
+    {
+      "name": "mafueng-bot",
+      "script": "app.js",
+      "watch": true,
+      "ignore_watch": [
+        "[\\/\\\\]\\./",
+        ".git",
+        "node_modules",
+      ],
+      "env": {
+        "COMMON_VARIABLE": "true"
+      },
+      "env_production" : {
+        "PORT": "5200",
+        "NODE_ENV": "production"
+      },
+      "env_development": {
+        "PORT": "5300",
+        "NODE_ENV": "development"
+      }
+    },
+  ],
+
+  "deploy" : {
+    "production" : {
+      "user": "root",
+      "host": ["128.199.87.142"],
+      "ref": "origin/master",
+      "repo": "git@github.com:youpin-city/mafueng-bot.git",
+      "path": "/opt/mafueng-bot.production",
+      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env production && cp /opt/mafueng-credentials/bot-credentials/production.json config/production.json",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+
+    "development" : {
+      "user": "root",
+      "host": ["128.199.87.142"],
+      "ref": "origin/master",
+      "repo": "git@github.com:youpin-city/youpin-bot.git",
+      "path": "/opt/youpin-bot.development",
+      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.development.json --env development && cp /opt/mafueng-credentials/bot-credentials/development.json config/development.json",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+
+  }
+}
