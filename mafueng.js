@@ -187,7 +187,7 @@ module.exports = (m, api, conversation, apiUserId) => {
     const isSticker = message ? !!message.sticker_id : false;
     const attachments = message ? message.attachments : undefined;
 
-    const isSkipping = (messageText.indexOf(context.__('#skip')) >= 0);
+    const isSkipping = messageText && (messageText.indexOf(context.__('#skip')) >= 0);
 
     if (isSkipping || attachments) {
       if (isSkipping ||
@@ -414,12 +414,15 @@ module.exports = (m, api, conversation, apiUserId) => {
               tags: context.hashtags,
             }, resolve);
         }));
+        console.log(context.photos[0] ||
+          'https://mafueng.youpin.city/public/image/logo-l.png');
         const pinId = res._id;
         const elements = [{
-          title: 'ยุพิน | YouPin',
+          title: 'มะเฟือง | MafuENG',
           subtitle: desc,
-          item_url: `http://youpin.city/pins/${pinId}`,
-          image_url: context.photos[0],
+          item_url: `http://mafueng.youpin.city/pins/${pinId}`,
+          image_url: context.photos[0] ||
+            'https://mafueng.youpin.city/public/image/logo-l.png',
         }];
         m.sendGeneric(userid, elements);
         context = {};

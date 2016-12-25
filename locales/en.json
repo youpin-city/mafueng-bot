@@ -20,10 +20,8 @@
     "The photos/videos have been added.": "",
     "🚩 Ahh, got it.": "",
     "🚩 The location has been updated.": "",
-    "Hurry up, I'm still waiting for photos or videos.": "",
     "Alright, can you explain the issue you'd like to report today? Please make it as detailed as possible.": "",
     "Could you please help me select appropriate categories for the issue? You can pick one from the list below or type #<category> for a custom category.": "",
-    "Let us know the location so that the staff can take care of the problem quickly.": "",
     "Next, can you help us locate the issue by sharing the location using Facebook Messenger App on your mobile phone? You can move the map around to pin the exact location or pick a place from the list.": "",
     "Thank you very much, {{name}}. Your issue has been submitted. We will notify the team as soon as possible.": "",
     "You can keep on typing! Send '#done' when you finish so that we can proceed to the next step.": "",
@@ -33,7 +31,7 @@
     "drainage": "",
     "trees": "",
     "safety": "",
-    "🚩 The location has been updated. ": "🚩 อัพเดทตำแหน่งพินให้แล้วนะฮ้า",
-    "toilet": "ห้องน้ำ",
+    "🚩 The location has been updated. ": "",
+    "toilet": "",
     "Any additional detail of the location, like floor or room number, would be great!": ""
 }
