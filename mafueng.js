@@ -183,16 +183,21 @@ module.exports = (m, api, conversation, apiUserId) => {
   const enterWaitImg = async((event, context) => {
     const userid = event.sender.id;
     const message = event.message;
+    const messageText = message ? message.text : undefined;
     const isSticker = message ? !!message.sticker_id : false;
     const attachments = message ? message.attachments : undefined;
 
-    if (attachments) {
-      if (!isSticker && (attachments[0].type === 'image' || attachments[0].type === 'video')) {
-        context.lastSent = (new Date()).getTime();
+    const isSkipping = (messageText.indexOf(context.__('#skip')) >= 0);
 
-        m.sendText(userid, context.__('(Y) Sweet!'));
+    if (isSkipping || attachments) {
+      if (isSkipping ||
+        (!isSticker && (attachments[0].type === 'image' || attachments[0].type === 'video'))) {
+        if (!isSkipping) {
+          context.lastSent = (new Date()).getTime();
+          m.sendText(userid, context.__('(Y) Sweet!'));
 
-        waiting(addPhotos(attachments, context));
+          waiting(addPhotos(attachments, context));
+        }
         waiting(new Promise((resolve) => {
           setTimeout(() => {
             context.lastSent = (new Date()).getTime();
@@ -217,28 +222,40 @@ module.exports = (m, api, conversation, apiUserId) => {
         );
       }
     } else {
-      m.sendText(userid, context.__("Hurry up, I'm still waiting for photos or videos."));
+      m.sendTextWithReplies(
+        userid,
+        context.__("If you really don't have photos or videos, you may skip this step."),
+        [m.createQuickReplyButton(context.__('#skip'), 'isSkipping')]
+      );
     }
   });
 
   const enterWaitLocation = async((event, context) => {
     const userid = event.sender.id;
     const message = event.message;
+    const messageText = message ? message.text : undefined;
     const isSticker = message ? !!message.sticker_id : false;
     const attachments = message ? message.attachments : undefined;
 
-    if (attachments && attachments[0].type === 'location') {
-      context.lastSent = (new Date()).getTime();
+    const isSkipping = messageText && (messageText.indexOf(context.__('#skip')) >= 0);
 
-      m.sendText(userid, context.__('🚩 Ahh, got it.'));
-      console.log(attachments[0]);
-      const point = attachments[0].payload.coordinates;
-      context.location = [point.lat, point.long];
-      context.locationTitle = attachments[0].title;
-      if (context.locationTitle === 'Pinned Location' ||
-        context.locationTitle === 'ตำแหน่งที่ตั้งที่ปักหมุดไว้') {
+    if (isSkipping || (attachments && attachments[0].type === 'location')) {
+      if (!isSkipping) {
+        context.lastSent = (new Date()).getTime();
+        m.sendText(userid, context.__('🚩 Ahh, got it.'));
+
+        const point = attachments[0].payload.coordinates;
+        context.location = [point.lat, point.long];
+        context.locationTitle = attachments[0].title;
+        if (context.locationTitle === 'Pinned Location' ||
+          context.locationTitle === 'ตำแหน่งที่ตั้งที่ปักหมุดไว้') {
+          context.locationTitle = '';
+        }
+      } else {
+        context.location = undefined;
         context.locationTitle = '';
       }
+
       waiting(new Promise((resolve) => {
         setTimeout(() => {
           context.lastSent = (new Date()).getTime();
@@ -260,10 +277,10 @@ module.exports = (m, api, conversation, apiUserId) => {
       m.sendText(userid, context.__("(Y) Cool! Don't forget to send me the location."));
       waiting(addPhotos(attachments, context));
     } else {
-      m.sendText(
+      m.sendTextWithReplies(
         userid,
-        context.__('Let us know the location so that the staff can take care ' +
-          'of the problem quickly.')
+        context.__("If you really can't input location, you may skip this step."),
+        [m.createQuickReplyButton(context.__('#skip'), 'isSkipping')]
       );
     }
   });
@@ -276,7 +293,6 @@ module.exports = (m, api, conversation, apiUserId) => {
     if (messageText) {
       context.locationDesc = messageText;
       context.lastSent = (new Date()).getTime();
-
       m.sendText(userid, context.__('Great, thank you.'));
 
       waiting(new Promise((resolve) => {
@@ -388,15 +404,15 @@ module.exports = (m, api, conversation, apiUserId) => {
               detail: desc,
               location: {
                 coordinates: context.location,
+                title: context.locationTitle,
+                desc: context.locationDesc,
               },
               owner: apiUserId,
               photos: context.photos,
               provider: apiUserId,
               status: 'unverified',
               tags: context.hashtags,
-            },
-                resolve
-              );
+            }, resolve);
         }));
         const pinId = res._id;
         const elements = [{
