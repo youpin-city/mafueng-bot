@@ -426,7 +426,7 @@ module.exports = (m, api, conversation, apiUserId) => {
         }];
         m.sendGeneric(userid, elements);
         context = {};
-        // waiting(conversation.updateContext(userid, context));
+        waiting(conversation.updateContext(userid, context));
       } else {
         context.lastSent = (new Date()).getTime();
         m.sendTextWithReplies(
