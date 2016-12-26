@@ -416,8 +416,6 @@ module.exports = (m, api, conversation, apiUserId) => {
           console.log(data);
           api.postPin(data, resolve);
         }));
-        console.log(context.photos[0] ||
-          'https://mafueng.youpin.city/public/image/logo-l.png');
         const pinId = res._id;
         const elements = [{
           title: 'มะเฟือง | MafuENG',
@@ -427,8 +425,7 @@ module.exports = (m, api, conversation, apiUserId) => {
             'https://mafueng.youpin.city/public/image/logo-l.png',
         }];
         m.sendGeneric(userid, elements);
-        context = {};
-        waiting(conversation.updateContext(userid, context));
+        waiting(conversation.updateContext(userid, {}));
       } else {
         context.lastSent = (new Date()).getTime();
         m.sendTextWithReplies(
