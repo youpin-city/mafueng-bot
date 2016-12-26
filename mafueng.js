@@ -411,6 +411,7 @@ module.exports = (m, api, conversation, apiUserId) => {
             provider: apiUserId,
             status: 'unverified',
             tags: context.hashtags,
+            organization: '583ddb7a3db23914407f9b58',
           };
           console.log(data);
           api.postPin(data, resolve);
