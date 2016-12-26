@@ -397,22 +397,23 @@ module.exports = (m, api, conversation, apiUserId) => {
         );
         const desc = context.desc.join(' ');
         const res = waiting(new Promise((resolve) => {
-          api.postPin(
-            {
-              categories: context.categories,
-              created_time: (new Date()).getTime(),
-              detail: desc,
-              location: {
-                coordinates: context.location,
-                title: context.locationTitle,
-                desc: context.locationDesc,
-              },
-              owner: apiUserId,
-              photos: context.photos,
-              provider: apiUserId,
-              status: 'unverified',
-              tags: context.hashtags,
-            }, resolve);
+          const data = {
+            categories: context.categories,
+            created_time: (new Date()).getTime(),
+            detail: desc,
+            location: {
+              coordinates: context.location,
+              title: context.locationTitle,
+              desc: context.locationDesc,
+            },
+            owner: apiUserId,
+            photos: context.photos,
+            provider: apiUserId,
+            status: 'unverified',
+            tags: context.hashtags,
+          };
+          console.log(data);
+          api.postPin(data, resolve);
         }));
         console.log(context.photos[0] ||
           'https://mafueng.youpin.city/public/image/logo-l.png');
