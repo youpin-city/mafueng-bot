@@ -396,6 +396,8 @@ module.exports = (m, api, conversation, apiUserId) => {
           )
         );
         const desc = context.desc.join(' ');
+        const user = context.profile;
+        user.facebook_id = userid;
         const res = waiting(new Promise((resolve) => {
           const data = {
             categories: context.categories,
@@ -407,6 +409,7 @@ module.exports = (m, api, conversation, apiUserId) => {
               desc: context.locationDesc,
             },
             owner: apiUserId,
+            user,
             photos: context.photos,
             provider: apiUserId,
             status: 'unverified',
