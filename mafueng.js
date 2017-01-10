@@ -260,12 +260,13 @@ module.exports = (m, api, conversation, apiUserId) => {
         setTimeout(() => {
           context.lastSent = (new Date()).getTime();
           context.state = STATE_WAIT_LOCATION_DETAIL;
-          m.sendText(
+          m.sendTextWithReplies(
             userid,
             context.__(
               'Any additional detail of the location, like floor or room number, ' +
               'would be great!'
-            )
+            ),
+            [m.createQuickReplyButton(context.__('#skip'), 'isSkipping')]
           );
           resolve();
         }, 1000);
@@ -289,9 +290,12 @@ module.exports = (m, api, conversation, apiUserId) => {
     const userid = event.sender.id;
     const message = event.message;
     const messageText = message ? message.text : undefined;
+    const isSkipping = messageText && (messageText.indexOf(context.__('#skip')) >= 0);
 
     if (messageText) {
-      context.locationDesc = messageText;
+      if (!isSkipping) {
+        context.locationDesc = messageText;
+      }
       context.lastSent = (new Date()).getTime();
       m.sendText(userid, context.__('Great, thank you.'));
 
