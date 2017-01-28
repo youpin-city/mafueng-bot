@@ -109,6 +109,38 @@ app.post('/webhook/', (req, res) => {
   }
 });
 
+
+// Notification hook verification
+app.get('/notifhook/', (req, res) => {
+  if (req.query['NOTIFICATION_TOKEN'] === config.get('notificationToken')) {
+    res.send('Notification token is correct!');
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+
+// Handle notification messages
+app.post('/notifhook/', (req, res) => {
+  // Verify with notification that is set on both side.
+  if (req.query['NOTIFICATION_TOKEN'] !== config.get('notificationToken')) {
+    res.send('Incorrect notification token!');
+    res.sendStatus(401);
+    return;
+  }
+  const data = req.body;
+  const userId = data.id;
+  const message = data.message;
+  if (!userId || !message) {
+    res.send('userId and message must not be empty.');
+    res.sendStatus(400);
+    return;
+  }
+  m.sendText(userId, message);
+  console.log(`Notified user id ${userId} with message - ${message}`);
+  res.send(`Successfully notifying user id ${userId}`);
+});
+
 app.listen(app.get('port'), () => {
   console.log(`Node app is running on port ${app.get('port')}`);
 });

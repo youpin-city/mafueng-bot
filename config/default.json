@@ -1,6 +1,7 @@
 {
     "appSecret": "",
     "pageAccessToken": "",
+    "notificationToken": "",
     "validationToken": "",
     "sessionMaxLength": 600000,
     "apiUri": "http://api:9100",
