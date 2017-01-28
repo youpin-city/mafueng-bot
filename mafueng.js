@@ -425,7 +425,7 @@ module.exports = (m, api, conversation, apiUserId) => {
         }));
         const pinId = res._id;
         const elements = [{
-          title: 'มะเฟือง | MafuENG',
+          title: 'iCare - Chula Engineering',
           subtitle: desc,
           item_url: `http://mafueng.youpin.city/pins/${pinId}`,
           image_url: context.photos[0] ||
