@@ -22,12 +22,15 @@ const STATE_WAIT_DESC = 'wait_desc';
 const STATE_WAIT_TAGS = 'wait_tags';
 
 const categories = [
-  'footpath',
-  'toilet',
-  'garbage',
-  'drainage',
-  'trees',
+  'repair',
+  'service',
+  'it',
+  'suggestion',
+  'classroom',
   'safety',
+  'sanitary',
+  'traffic',
+  'others'
 ];
 
 module.exports = (m, api, conversation, apiUserId) => {
