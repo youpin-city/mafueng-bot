@@ -67,6 +67,21 @@ module.exports = (PAGE_ACCESS_TOKEN) => {
       _callSendAPI(messageData);
     },
 
+    sendTextWithLocationPrompt(userid, text) {
+      const messageData = {
+        recipient: {
+          id: userid,
+        },
+        message: {
+          text,
+          quick_replies: {
+            content_type: 'location',
+          },
+        },
+      };
+      _callSendAPI(messageData);
+    },
+
     sendButton(userid, text, buttons) {
       const messageData = {
         recipient: {

@@ -30,7 +30,7 @@ const categories = [
   'safety',
   'sanitary',
   'traffic',
-  'others'
+  'others',
 ];
 
 module.exports = (m, api, conversation, apiUserId) => {
@@ -206,7 +206,7 @@ module.exports = (m, api, conversation, apiUserId) => {
             context.lastSent = (new Date()).getTime();
             context.state = STATE_WAIT_LOCATION;
 
-            m.sendText(
+            m.sendTextWithLocationPrompt(
               userid,
               context.__(
                 'Next, can you help us locate the issue by sharing the location ' +
@@ -330,21 +330,16 @@ module.exports = (m, api, conversation, apiUserId) => {
       const isEnding = processText(messageText, context);
 
       if (isEnding) {
-        if (context.descLength < 10) {
-          context.lastSent = (new Date()).getTime();
-          m.sendText(userid, context.__('Provide us a little more detail please.'));
-        } else {
-          context.state = STATE_WAIT_TAGS;
-          context.categories = [];
-          m.sendTextWithReplies(
-            userid,
-            context.__(
-              'Could you please help me select appropriate categories for the issue? ' +
-              'You can pick one from the list below or type #<category> for a custom category.'
-            ),
-            tagReplies(context).slice(1)
-          );
-        }
+        context.state = STATE_WAIT_TAGS;
+        context.categories = [];
+        m.sendTextWithReplies(
+          userid,
+          context.__(
+            'Could you please help me select appropriate categories for the issue? ' +
+            'You can pick one from the list below or type #<category> for a custom category.'
+          ),
+          tagReplies(context).slice(1)
+        );
       } else {
         if (context.desc.length === 1) {
           // After 1st response
@@ -360,6 +355,12 @@ module.exports = (m, api, conversation, apiUserId) => {
           m.sendTextWithReplies(
             userid,
             context.__("Done? If not, don't worry, I'm still listening."),
+            _.take(tagReplies(context), 1)
+          );
+        } else {
+          m.sendTextWithReplies(
+            userid,
+            '',
             _.take(tagReplies(context), 1)
           );
         }
