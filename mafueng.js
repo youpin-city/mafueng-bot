@@ -431,9 +431,9 @@ module.exports = (m, api, conversation, apiUserId) => {
         const elements = [{
           title: 'iCare - Chula Engineering',
           subtitle: desc,
-          item_url: `http://mafueng.youpin.city/pins/${pinId}`,
+          item_url: `https://icare.eng.chula.ac.th/pins/${pinId}`,
           image_url: context.photos[0] ||
-            'https://mafueng.youpin.city/public/image/logo-l.png',
+            'https://icare.eng.chula.ac.th/public/image/logo-l.png',
         }];
         m.sendGeneric(userid, elements);
         waiting(conversation.updateContext(userid, {}));

@@ -74,9 +74,9 @@ module.exports = (PAGE_ACCESS_TOKEN) => {
         },
         message: {
           text,
-          quick_replies: {
+          quick_replies: [{
             content_type: 'location',
-          },
+          }],
         },
       };
       _callSendAPI(messageData);
