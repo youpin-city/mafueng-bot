@@ -209,8 +209,7 @@ module.exports = (m, api, conversation, apiUserId) => {
             m.sendTextWithLocationPrompt(
               userid,
               context.__(
-                'Next, can you help us locate the issue by sharing the location ' +
-                'using Facebook Messenger App on your mobile phone? ' +
+                'Next, can you help us locate the issue by sharing the location? ' +
                 'You can move the map around to pin the exact location ' +
                 'or pick a place from the list.'
               )
