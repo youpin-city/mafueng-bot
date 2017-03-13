@@ -144,6 +144,7 @@ module.exports = (m, api, conversation, apiUserId) => {
     context.state = STATE_WAIT_INTENT;
 
     greet(userid, context);
+    waiting(conversation.updateContext(userid, context));
   });
 
   const enterWaitIntent = async((event, context) => {
@@ -181,6 +182,7 @@ module.exports = (m, api, conversation, apiUserId) => {
     } else {
       m.sendText(userid, context.__('Slow down, could you please answer my question first?'));
     }
+    waiting(conversation.updateContext(userid, context));
   });
 
   const enterWaitImg = async((event, context) => {
@@ -231,6 +233,7 @@ module.exports = (m, api, conversation, apiUserId) => {
         [m.createQuickReplyButton(context.__('#skip'), 'isSkipping')]
       );
     }
+    waiting(conversation.updateContext(userid, context));
   });
 
   const enterWaitLocation = async((event, context) => {
@@ -287,6 +290,7 @@ module.exports = (m, api, conversation, apiUserId) => {
         [m.createQuickReplyButton(context.__('#skip'), 'isSkipping')]
       );
     }
+    waiting(conversation.updateContext(userid, context));
   });
 
   const enterWaitLocationDetail = async((event, context) => {
@@ -317,6 +321,7 @@ module.exports = (m, api, conversation, apiUserId) => {
         }, 1000);
       }));
     }
+    waiting(conversation.updateContext(userid, context));
   });
 
   const enterWaitDesc = async((event, context) => {
@@ -378,6 +383,7 @@ module.exports = (m, api, conversation, apiUserId) => {
         context.location = [point.lat, point.long];
       }
     }
+    waiting(conversation.updateContext(userid, context));
   });
 
   const enterWaitTags = async((event, context) => {
@@ -444,6 +450,7 @@ module.exports = (m, api, conversation, apiUserId) => {
           context.__('Anything else? You can keep adding more tags.'),
           tagReplies(context)
         );
+        waiting(conversation.updateContext(userid, context));
       }
     }
   });
@@ -501,7 +508,6 @@ module.exports = (m, api, conversation, apiUserId) => {
           waiting(enterNull(event, context));
       }
 
-      waiting(conversation.updateContext(userid, context));
       // console.log('-- Saved context --');
       // console.log(context);
     }),
