@@ -419,7 +419,7 @@ module.exports = (m, api, conversation, apiUserId) => {
             user,
             photos: context.photos,
             provider: apiUserId,
-            status: 'unverified',
+            status: 'pending',
             tags: context.hashtags,
             organization: '583ddb7a3db23914407f9b58',
           };
