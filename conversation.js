@@ -25,7 +25,7 @@ module.exports = (sessionMaxLength) => { // eslint-disable-line arrow-body-style
 
         console.log(`Previous session discarded: ${context}`);
         // Use previous language preference
-        return { url: context.url };
+        return { url: contextJSON.url };
       }
 
       return {};
