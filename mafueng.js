@@ -441,7 +441,7 @@ module.exports = (m, api, conversation, apiUserId) => {
             'https://icare.eng.chula.ac.th/public/image/logo-l.png',
         }];
         m.sendGeneric(userid, elements);
-        waiting(conversation.updateContext(userid, {}));
+        waiting(conversation.updateContext(userid, { url: context.url }));
       } else {
         context.lastSent = (new Date()).getTime();
         m.sendTextWithReplies(

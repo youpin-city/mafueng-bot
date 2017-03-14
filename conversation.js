@@ -22,7 +22,10 @@ module.exports = (sessionMaxLength) => { // eslint-disable-line arrow-body-style
         if ((new Date()).getTime() - contextJSON.firstReceived < sessionMaxLength) {
           return contextJSON;
         }
+
         console.log(`Previous session discarded: ${context}`);
+        // Use previous language preference
+        return { url: context.url };
       }
 
       return {};
