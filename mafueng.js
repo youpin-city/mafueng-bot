@@ -24,7 +24,7 @@ const STATE_WAIT_TAGS = 'wait_tags';
 const categories = [
   'repair',
   'service',
-  'it',
+  'IT',
   'suggestion',
   'classroom',
   'safety',
