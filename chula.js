@@ -22,14 +22,9 @@ const STATE_WAIT_DESC = 'wait_desc';
 const STATE_WAIT_TAGS = 'wait_tags';
 
 const categories = [
-  'repair',
-  'service',
-  'IT',
-  'suggestion',
-  'classroom',
-  'safety',
-  'sanitary',
-  'traffic',
+  'physical',
+  'security',
+  'facility',
   'others',
 ];
 

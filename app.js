@@ -54,8 +54,8 @@ const conversation = require('./conversation.js')(config.get('sessionMaxLength')
 // Youpin API utils
 const ApiLib = require('./youpin-api.js');
 
-// Mafueng bot
-let mafueng = require('./mafueng.js');
+// Chula bot
+let mafueng = require('./chula.js');
 new ApiLib(API_URI, API_USERNAME, API_PASSWORD).then((api) => {
   mafueng = mafueng(m, api, conversation, API_USER_ID);
 }).catch(err => {
