@@ -28,10 +28,10 @@
     "production" : {
       "user": "root",
       "host": ["128.199.87.142"],
-      "ref": "origin/master",
+      "ref": "origin/chula",
       "repo": "git@github.com:youpin-city/mafueng-bot.git",
-      "path": "/opt/mafueng-bot.production",
-      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env production && cp /opt/mafueng-credentials/bot-credentials/production.json config/production.json",
+      "path": "/opt/chula/bot.production",
+      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env production && cp /opt/chula-credentials/bot-credentials/production.json config/production.json",
       "env": {
         "NODE_ENV": "production"
       }
@@ -40,10 +40,10 @@
     "development" : {
       "user": "root",
       "host": ["128.199.87.142"],
-      "ref": "origin/master",
-      "repo": "git@github.com:youpin-city/youpin-bot.git",
-      "path": "/opt/youpin-bot.development",
-      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.development.json --env development && cp /opt/mafueng-credentials/bot-credentials/development.json config/development.json",
+      "ref": "origin/chula",
+      "repo": "git@github.com:youpin-city/mafueng-bot.git",
+      "path": "/opt/chula/bot.development",
+      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.development.json --env development && cp /opt/chula-credentials/bot-credentials/development.json config/development.json",
       "env": {
         "NODE_ENV": "development"
       }
