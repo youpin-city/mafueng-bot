@@ -31,7 +31,6 @@ const categories = [
 module.exports = (m, api, conversation, apiUserId) => {
   function tagReplies(context) {
     const tags = [m.createQuickReplyButton(context.__('#done'), 'isEnding')];
-    console.log('tagggg', tags);
     const categoryTags = _.map(categories, cat =>
       m.createQuickReplyButton(`#${context.__(cat)}`, cat)
     );
@@ -418,13 +417,11 @@ module.exports = (m, api, conversation, apiUserId) => {
       image_url: 'https://scontent.fbkk2-4.fna.fbcdn.net/v/t34.0-12/20864639_1691630000869707_969480378_n.jpg?oh=4eaa27b34e1de1e88e38f0e1d156aa11&oe=599EDD90',
     }];
     m.sendGeneric(userid, elements);
-    console.log('eiei', context);
     waiting(conversation.updateContext(userid, { url: context.url }));
   }
 
   // TODO: Chula not use tag. However, tag might be use in future.
   const enterWaitTags = async((event, context) => {
-    console.log('enterWaitTags');
     const userid = event.sender.id;
 
     context.lastSent = (new Date()).getTime();
@@ -521,7 +518,6 @@ module.exports = (m, api, conversation, apiUserId) => {
           break;
         // case STATE_WAIT_TAGS:
         //   waiting(enterWaitTags(event, context));
-        //   console.log('6state jaaaa ====> ', context.state);
         //   break;
         default:
           waiting(enterNull(event, context));

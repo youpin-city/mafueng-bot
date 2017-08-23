@@ -14,7 +14,7 @@
         "COMMON_VARIABLE": "true"
       },
       "env_production" : {
-        "PORT": "5200",
+        "PORT": "5300",
         "NODE_ENV": "production"
       },
       "env_development": {
