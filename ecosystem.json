@@ -1,7 +1,7 @@
 {
   "apps" : [
     {
-      "name": "mafueng-bot",
+      "name": "chula-bot",
       "script": "app.js",
       "watch": true,
       "ignore_watch": [
@@ -10,10 +10,11 @@
         "node_modules",
       ],
       "env": {
+        "PORT": "5100",
         "COMMON_VARIABLE": "true"
       },
       "env_production" : {
-        "PORT": "5200",
+        "PORT": "5300",
         "NODE_ENV": "production"
       },
       "env_development": {

@@ -22,21 +22,15 @@ const STATE_WAIT_DESC = 'wait_desc';
 const STATE_WAIT_TAGS = 'wait_tags';
 
 const categories = [
-  'repair',
-  'service',
-  'IT',
-  'suggestion',
-  'classroom',
-  'safety',
-  'sanitary',
-  'traffic',
+  'physical',
+  'security',
+  'facility',
   'others',
 ];
 
 module.exports = (m, api, conversation, apiUserId) => {
   function tagReplies(context) {
     const tags = [m.createQuickReplyButton(context.__('#done'), 'isEnding')];
-
     const categoryTags = _.map(categories, cat =>
       m.createQuickReplyButton(`#${context.__(cat)}`, cat)
     );
@@ -332,18 +326,11 @@ module.exports = (m, api, conversation, apiUserId) => {
 
     if (messageText) {
       const isEnding = processText(messageText, context);
-
       if (isEnding) {
-        context.state = STATE_WAIT_TAGS;
-        context.categories = [];
-        m.sendTextWithReplies(
-          userid,
-          context.__(
-            'Could you please help me select appropriate categories for the issue? ' +
-            'You can pick one from the list below or type #<category> for a custom category.'
-          ),
-          tagReplies(context).slice(1)
-        );
+        // context.state = STATE_WAIT_TAGS;
+        context.state = undefined;
+        sendPin2DB(event, context);
+        return;
       } else {
         if (context.desc.length === 1) {
           // After 1st response
@@ -385,73 +372,102 @@ module.exports = (m, api, conversation, apiUserId) => {
     waiting(conversation.updateContext(userid, context));
   });
 
+  function sendPin2DB(event, context) {
+    const userid = event.sender.id;
+
+    context.lastSent = (new Date()).getTime();
+
+    m.sendText(
+      userid,
+      context.__('Thank you very much, {{name}}. Your issue has been ' +
+        'submitted. We will notify the team as soon as possible.',
+        { name: context.profile.first_name }
+      )
+    );
+    const desc = context.desc.join(' ');
+    const user = context.profile;
+    user.facebook_id = userid;
+    const res = waiting(new Promise((resolve) => {
+      const data = {
+        categories: context.categories,
+        created_time: (new Date()).getTime(),
+        detail: desc,
+        location: {
+          coordinates: context.location,
+          title: context.locationTitle,
+          desc: context.locationDesc,
+        },
+        owner: apiUserId,
+        user,
+        photos: context.photos,
+        provider: apiUserId,
+        status: 'pending',
+        tags: context.hashtags,
+        organization: '583ddb7a3db23914407f9b58',
+      };
+      // console.log(data);
+      api.postPin(data, resolve);
+    }));
+    const pinId = res._id;
+    const elements = [{
+      title: 'CU Solving Center x YouPin',
+      subtitle: desc,
+      item_url: `https://icare.eng.chula.ac.th/pins/${pinId}`,
+      // image_url: context.photos[0] ||
+      image_url: 'https://scontent.fbkk2-4.fna.fbcdn.net/v/t34.0-12/20864639_1691630000869707_969480378_n.jpg?oh=4eaa27b34e1de1e88e38f0e1d156aa11&oe=599EDD90',
+    }];
+    m.sendGeneric(userid, elements);
+    waiting(conversation.updateContext(userid, { url: context.url }));
+  }
+
+  // TODO: Chula not use tag. However, tag might be use in future.
   const enterWaitTags = async((event, context) => {
     const userid = event.sender.id;
-    const message = event.message;
-    const messageText = message ? message.text : undefined;
-    if (messageText) {
-      if (message.quick_reply) {
-        if (message.quick_reply.payload !== 'isEnding') {
-          context.categories.push(message.quick_reply.payload);
-        }
-      }
 
-      const isEnding = processText(messageText, context);
+    context.lastSent = (new Date()).getTime();
 
-      if (isEnding) {
-        context.lastSent = (new Date()).getTime();
-
-        m.sendText(
-          userid,
-          context.__('Thank you very much, {{name}}. Your issue has been ' +
-            'submitted. We will notify the team as soon as possible.',
-            { name: context.profile.first_name }
-          )
-        );
-        const desc = context.desc.join(' ');
-        const user = context.profile;
-        user.facebook_id = userid;
-        const res = waiting(new Promise((resolve) => {
-          const data = {
-            categories: context.categories,
-            created_time: (new Date()).getTime(),
-            detail: desc,
-            location: {
-              coordinates: context.location,
-              title: context.locationTitle,
-              desc: context.locationDesc,
-            },
-            owner: apiUserId,
-            user,
-            photos: context.photos,
-            provider: apiUserId,
-            status: 'pending',
-            tags: context.hashtags,
-            organization: '583ddb7a3db23914407f9b58',
-          };
-          console.log(data);
-          api.postPin(data, resolve);
-        }));
-        const pinId = res._id;
-        const elements = [{
-          title: 'iCare - Chula Engineering',
-          subtitle: desc,
-          item_url: `https://icare.eng.chula.ac.th/pins/${pinId}`,
-          image_url: context.photos[0] ||
-            'https://icare.eng.chula.ac.th/public/image/logo-l.png',
-        }];
-        m.sendGeneric(userid, elements);
-        waiting(conversation.updateContext(userid, { url: context.url }));
-      } else {
-        context.lastSent = (new Date()).getTime();
-        m.sendTextWithReplies(
-          userid,
-          context.__('Anything else? You can keep adding more tags.'),
-          tagReplies(context)
-        );
-        waiting(conversation.updateContext(userid, context));
-      }
-    }
+    m.sendText(
+      userid,
+      context.__('Thank you very much, {{name}}. Your issue has been ' +
+        'submitted. We will notify the team as soon as possible.',
+        { name: context.profile.first_name }
+      )
+    );
+    const desc = context.desc.join(' ');
+    const user = context.profile;
+    user.facebook_id = userid;
+    const res = waiting(new Promise((resolve) => {
+      const data = {
+        categories: context.categories,
+        created_time: (new Date()).getTime(),
+        detail: desc,
+        location: {
+          coordinates: context.location,
+          title: context.locationTitle,
+          desc: context.locationDesc,
+        },
+        owner: apiUserId,
+        user,
+        photos: context.photos,
+        provider: apiUserId,
+        status: 'pending',
+        tags: context.hashtags,
+        organization: '583ddb7a3db23914407f9b58',
+      };
+      // console.log(data);
+      api.postPin(data, resolve);
+    }));
+    const pinId = res._id;
+    const elements = [{
+      title: 'CU Solving Center x YouPin',
+      subtitle: desc,
+      item_url: `https://icare.eng.chula.ac.th/pins/${pinId}`,
+      // image_url: context.photos[0] ||
+      image_url: 'https://scontent.fbkk2-4.fna.fbcdn.net/v/t34.0-12/20864639_1691630000869707_969480378_n.jpg?oh=4eaa27b34e1de1e88e38f0e1d156aa11&oe=599EDD90',
+    }];
+    m.sendGeneric(userid, elements);
+    console.log('eiei', context);
+    waiting(conversation.updateContext(userid, { url: context.url }));
   });
 
   return {
@@ -500,9 +516,9 @@ module.exports = (m, api, conversation, apiUserId) => {
         case STATE_WAIT_DESC:
           waiting(enterWaitDesc(event, context));
           break;
-        case STATE_WAIT_TAGS:
-          waiting(enterWaitTags(event, context));
-          break;
+        // case STATE_WAIT_TAGS:
+        //   waiting(enterWaitTags(event, context));
+        //   break;
         default:
           waiting(enterNull(event, context));
       }
