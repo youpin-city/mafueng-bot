@@ -1,7 +1,7 @@
 {
   "apps" : [
     {
-      "name": "mafueng-bot",
+      "name": "chula-bot",
       "script": "app.js",
       "watch": true,
       "ignore_watch": [
