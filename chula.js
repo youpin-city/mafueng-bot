@@ -461,7 +461,7 @@ module.exports = (m, api, conversation, apiUserId) => {
     const elements = [{
       title: 'CU Solving Center x YouPin',
       subtitle: desc,
-      item_url: `https://icare.eng.chula.ac.th/pins/${pinId}`,
+      item_url: `https://chula.youpin.city/pins/${pinId}`,
       // image_url: context.photos[0] ||
       image_url: 'https://scontent.fbkk2-4.fna.fbcdn.net/v/t34.0-12/20864639_1691630000869707_969480378_n.jpg?oh=4eaa27b34e1de1e88e38f0e1d156aa11&oe=599EDD90',
     }];
